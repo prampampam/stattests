@@ -22,8 +22,8 @@ def generate_data(skew: float = 2.0,
     :return: (np.array, np.array, np.array, np.array, np.array) shape (NN, N), views in control group,
     clicks in control group, views in treatment group, clicks in treatment group, ground truth user CTRs for control group
     """
-    views_0 = np.exp(scipy.stats.norm(1, skew).rvs(NN * N)).astype(np.int).reshape(NN, N) + 1
-    views_1 = np.exp(scipy.stats.norm(1, skew).rvs(NN * N)).astype(np.int).reshape(NN, N) + 1
+    views_0 = np.exp(scipy.stats.norm(1, skew).rvs(NN * N)).astype(int).reshape(NN, N) + 1
+    views_1 = np.exp(scipy.stats.norm(1, skew).rvs(NN * N)).astype(int).reshape(NN, N) + 1
 
     # views are always positive, abs is fixing numerical issues with high skewness
     views_0 = np.absolute(views_0)
@@ -39,4 +39,4 @@ def generate_data(skew: float = 2.0,
     clicks_1 = scipy.stats.binom(n=views_1, p=success_rate_1).rvs()
     return ((views_0.astype(np.float64), clicks_0.astype(np.float64)),
             (views_1.astype(np.float64), clicks_1.astype(np.float64)),
-            success_rate_0.astype(np.float64))
+            (success_rate_0.astype(np.float64), success_rate_1.astype(np.float64)))

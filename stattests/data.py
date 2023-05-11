@@ -2,6 +2,7 @@ import pathlib
 from typing import Callable, Tuple
 
 import numpy as np
+from tqdm import tqdm
 
 from stattests.generation import generate_data
 from stattests.tests import t_test, mannwhitney, delta_method_ctrs, bootstrap, linearization_of_clicks, bucketization, \
@@ -197,3 +198,28 @@ def apply_all_tests(data_dir: str,
         lambda: permutation_test(clicks_0_ab, views_0_ab, clicks_1_ab, views_1_ab),
         lambda: permutation_test(clicks_0_aa, views_0_aa, clicks_1_aa, views_1_aa),
         **ab_params)
+
+
+if __name__ == "__main__":
+    success_rate = 0.02
+    uplift = 0.2
+    N = 5000
+    NN = 2000
+
+    beta = 1000
+    skew = 1
+
+    skew_params = []
+    for s in np.linspace(0.1, 4, 20):
+        skew_params.append({'success_rate': success_rate, 'uplift': uplift, 'beta': beta, 'skew': s, 'N': N, 'NN': NN})
+
+    beta_params = []
+    for b in np.logspace(0, 3, 20)[::-1]:
+        beta_params.append({'success_rate': success_rate, 'uplift': uplift, 'beta': b, 'skew': skew, 'N': N, 'NN': NN})
+
+    sr_params = []
+    for sr in np.logspace(-3, -0.3, 20):
+        sr_params.append({'success_rate': sr, 'uplift': uplift, 'beta': 500, 'skew': skew, 'N': N, 'NN': NN})
+
+    for param in tqdm(beta_params + skew_params + sr_params):
+        apply_all_tests('../data', **param)
