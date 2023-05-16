@@ -4,3 +4,5 @@ stattests/__pycache__
 .DS_Store
 .DS_Store
 data/*
+compressed_gifs/*
+gifs/*
