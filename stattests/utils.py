@@ -110,13 +110,13 @@ def plot_summary(dict2plot: Dict[str, Tuple[np.ndarray, np.ndarray, str]],
     views_99_percentile = np.percentile(views_0.ravel(), 99)
     ax_views.set_title(f'Views, 99%-ile = {views_99_percentile:<7.1f}')
 
-    sns.distplot(ground_truth_success_rates.ravel(),
+    sns.distplot(ground_truth_success_rates,
                  bins=np.linspace(0, 0.2, 100),
                  ax=ax_clicks,
                  kde=False,
                  norm_hist=True)
     ax_clicks.set_xlim((0, 0.1))
-    success_rate_std = ground_truth_success_rates[:10].flatten().std()
+    success_rate_std = np.std(ground_truth_success_rates[:10])
     ax_clicks.set_title(f'Ground truth user CTR, std = {success_rate_std:2.3f}')
     return fig
 

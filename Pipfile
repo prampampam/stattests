@@ -10,10 +10,10 @@ matplotlib = "==3.1.3"
 numpy = "==1.18.1"
 pandas = "==1.0.1"
 scipy = "==1.4.1"
-seaborn = "==0.10.0"
+seaborn = "==0.12.2"
 tqdm = "==4.42.1"
 ipykernel = "==5.5.6"
-bootstrapped = "*"
+bootstrapped = "==0.0.2"
 
 [dev-packages]
 
