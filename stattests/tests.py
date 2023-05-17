@@ -212,3 +212,44 @@ def permutation_test(clicks_0: np.ndarray,
         p_values[i] = 2 * np.minimum(samples - insert_position, insert_position) / samples
 
     return p_values
+
+
+def t_stats(x, y):
+    t = (x.mean() - y.mean()) / (np.sqrt(x.var() / x.shape[0] + y.var() / y.shape[0]))
+    return t
+
+
+def bootstrap_stat_test(
+    a: np.ndarray,
+    b: np.ndarray,
+    cnt_samples=10000,
+):
+    """
+    Функция рассчета теста бутстрепа
+    :param a: контрольная выборка
+    :param b: пилотная выборка
+    :param cnt_samples: количество итераций бутстрепа
+    """
+    # https://en.wikipedia.org/wiki/Bootstrapping_(statistics)#Bootstrap_hypothesis_testing
+    z = np.concatenate((a, b), axis=None)
+    t = t_stats(a, b)
+
+    a_hat = a - a.mean() + z.mean()
+    b_hat = b - b.mean() + z.mean()
+
+    result_p_value = []
+
+    for i in range(cnt_samples):
+
+        a_hat_sample = np.random.choice(a_hat, size=len(a_hat), replace=True)
+        b_hat_sample = np.random.choice(b_hat, size=len(b_hat), replace=True)
+
+        t_sample = t_stats(a_hat_sample, b_hat_sample)
+        if abs(t_sample) >= abs(t):
+            result_p_value.append(1)
+        else:
+            result_p_value.append(0)
+
+    p_value = np.mean(result_p_value)
+
+    return p_value
